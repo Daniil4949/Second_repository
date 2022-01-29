@@ -1,30 +1,40 @@
 graph={}
-graph['you']=['alice','bob','claire']
-graph['bob']=['anuj','peggy']
-graph['claire']=['thom','jonny']
-graph['alice']=['peggy']
-graph['anuj']=[]
-graph['peggy']=[]
-graph['thom']=[]
-graph['jonny']=[]
-def person_is_seller(name):
-    return name[-1]=='m'
-from collections import deque
-search_queue=deque()
-def search(name):
-    search_queue=deque()
-    search_queue+=graph[name]
-    searched=[]
-    while search_queue:
-        person=search_queue.popleft()
-        if not person in searched:
-            if person_is_seller(person):
-                      print(person,'is a mango seller!')
-            else:
-                search_queue+=graph[person]
-                searched.append(person)
-search('you')
-
-
-
+graph['start']={}
+graph['start']['a']=6
+graph['start']['b']=2
+graph['a']={}
+graph['a']['fin']=1
+graph['b']={}
+graph['b']['a']=3
+graph['b']['fin']=5
+graph['fin']={}
+infinity=float('inf')
+costs={}
+costs['a']=6
+costs['b']=2
+costs['fin']=infinity
+parents={}
+parents['a']='start'
+parents['b']='start'
+processed=[]
+def find_lowest_cost_node(costs):
+    lowest_cost=float('inf')
+    lowest_cost_node=None
+    for node in costs:
+        cost=costs[node]
+        if cost<lowest_cost and node not in processed:
+            lowest_cost=cost
+            lowest_cost_node=node
+    return lowest_cost_node
+node=find_lowest_cost_node(costs)
+while node is not None:
+    cost=costs[node]
+    neighbours=graph[node]
+    for n in neighbours.keys():
+        new_cost=cost+neighbours[n]
+        if costs[n]>new_cost:
+            costs[n]=new_cost
+            parents[n]=node
+    processed.append(node)
+    node=find_lowest_cost_node(costs)
 
