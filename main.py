@@ -1,30 +1,34 @@
-graph={}
-graph['you']=['alice','bob','claire']
-graph['bob']=['anuj','peggy']
-graph['claire']=['thom','jonny']
-graph['alice']=['peggy']
-graph['anuj']=[]
-graph['peggy']=[]
-graph['thom']=[]
-graph['jonny']=[]
-def person_is_seller(name):
-    return name[-1]=='m'
-from collections import deque
-search_queue=deque()
-def search(name):
-    search_queue=deque()
-    search_queue+=graph[name]
-    searched=[]
-    while search_queue:
-        person=search_queue.popleft()
-        if not person in searched:
-            if person_is_seller(person):
-                      print(person,'is a mango seller!')
-            else:
-                search_queue+=graph[person]
-                searched.append(person)
-search('you')
+class Integer:
+    @classmethod
+    def verify_method(cls, coord):
+        if type(coord) != int:
+            raise TypeError('Координата должна быть целым числом!')
+
+    def __set_name__(self, owner, name):
+        self.name = '_' + name
+
+    def __get__(self, instance, owner):
+        return getattr(instance, self.name)
+
+    def __set__(self, instance, value):
+        self.verify_method(value)
+        setattr(instance, self.name, value)
 
 
+class Point3D:
+    x = Integer()
+    y = Integer()
+    z = Integer()
+
+    def __init__(self, x, y, z):
+        self._x = x
+        self._y = y
+        self._z = z
+
+    @classmethod
+    def verify_method(cls, coord):
+        if type(coord) != int:
+            raise TypeError('Координата должна быть целым числом!')
 
 
+p = Point3D(1, 2, 3)
